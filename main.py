@@ -17,29 +17,35 @@ async def render_pdf(
 
         results = []
 
-    for i, img in enumerate(images):
-        buffer = io.BytesIO()
-        img.save(buffer, format="PNG")
-        encoded = base64.b64encode(buffer.getvalue()).decode()
+        for i, img in enumerate(images):
+            buffer = io.BytesIO()
+            img.save(buffer, format="PNG")
+            encoded = base64.b64encode(buffer.getvalue()).decode()
 
-        results.append({
-            "page_number": i + 1,
-            "image_base64": encoded
-        })
+            results.append({
+                "page_number": i + 1,
+                "image_base64": encoded
+            })
 
-    return {
-        "report_id": report_id,
-    "status": "success",
-    "page_images": results,
-    "meta": {
-        "total_pages": len(results)
-    }
-}
+        return {
+            "report_id": report_id,
+            "status": "success",
+            "page_images": results,
+            "meta": {
+                "total_pages": len(results)
+            }
+        }
+
     except Exception as e:
         return {
             "report_id": report_id,
             "status": "error",
             "error": {
+                "code": "PDF_RENDER_FAILED",
+                "message": "Failed to process PDF",
+                "details": str(e)
+            }
+        }
                 "code": "PDF_RENDER_FAILED",
                 "message": "Failed to process PDF",
                 "details": str(e)
