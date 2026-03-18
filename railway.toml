@@ -2,4 +2,4 @@
 builder = "NIXPACKS"
 
 [phases.setup]
-nixPkgs = ["poppler"]
+nixPkgs = ["poppler", "poppler-utils"]
