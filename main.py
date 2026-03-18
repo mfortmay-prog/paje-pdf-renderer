@@ -15,6 +15,7 @@ async def render_pdf(
 ):
     try:
         report_id = report_id or "unknown"
+
         if file:
             pdf_bytes = await file.read()
 
@@ -25,7 +26,14 @@ async def render_pdf(
         else:
             raise Exception("No file or pdf_url provided")
 
-        images = convert_from_bytes(pdf_bytes)
+        images = convert_from_bytes(
+            pdf_bytes,
+            poppler_path="/usr/bin",
+            first_page=1,
+            last_page=10
+        )
+
+        print(f"Converted {len(images)} pages")
 
         results = []
 
