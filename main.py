@@ -9,11 +9,12 @@ app = FastAPI()
 
 @app.post("/render-pdf")
 async def render_pdf(
-    report_id: str = Form(...),
+    report_id: str = Form(None),
     file: UploadFile = File(None),
     pdf_url: str = Form(None)
 ):
     try:
+        report_id = report_id or "unknown"
         if file:
             pdf_bytes = await file.read()
 
