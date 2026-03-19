@@ -9,6 +9,8 @@ import base64
 
 app = FastAPI()
 
+print("=== NEW VERSION DEPLOYED ===")
+
 @app.post("/render-pdf")
 async def render_pdf(
     report_id: str = Form(None),
