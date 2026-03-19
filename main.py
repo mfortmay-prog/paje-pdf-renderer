@@ -78,11 +78,13 @@ async def render_pdf(
                 "page_number": i + 1,
                 "image_base64": encoded
             })
-
+            
+        print(f"Returning {len(results)} images")
+        
         return {
             "report_id": report_id,
             "status": "success",
-            "page_images": results,
+            "images": results,
             "meta": {
                 "total_pages": len(results)
             }
