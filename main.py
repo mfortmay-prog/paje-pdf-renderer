@@ -4,6 +4,7 @@ from pdf2image import convert_from_bytes, convert_from_path
 import requests
 import io
 import os
+import subprocess
 import base64
 
 app = FastAPI()
@@ -32,7 +33,24 @@ async def render_pdf(
 
         with open(temp_path, "wb") as f:
             f.write(pdf_bytes)
+            
+        print(f"Temp file exists: {os.path.exists(temp_path)}")
+        print(f"Temp file size: {os.path.getsize(temp_path)}")
 
+        # Check where poppler is
+        result = subprocess.run(["which", "pdftoppm"], capture_output=True, text=True)
+        print(f"pdftoppm path: {result.stdout}")
+
+        # Try running poppler manually
+        test = subprocess.run(
+            ["pdftoppm", temp_path, "/tmp/test"],
+            capture_output=True,
+            text=True
+            )
+
+        print(f"pdftoppm return code: {test.returncode}")
+        print(f"pdftoppm stderr: {test.stderr}")
+            
         # Convert using file path (more reliable)
         images = convert_from_path(
             temp_path,
