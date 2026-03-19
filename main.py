@@ -30,7 +30,9 @@ async def render_pdf(
             pdf_bytes,
             poppler_path="/usr/bin",
             first_page=1,
-            last_page=10
+            last_page=10,
+            fmt="png",
+            thread_count=1
         )
 
         print(f"Converted {len(images)} pages")
