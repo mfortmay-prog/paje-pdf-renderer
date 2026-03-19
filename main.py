@@ -3,6 +3,7 @@ from typing import Optional
 from pdf2image import convert_from_bytes, convert_from_path
 import requests
 import io
+import os
 import base64
 
 app = FastAPI()
@@ -38,10 +39,14 @@ async def render_pdf(
             poppler_path="/usr/bin",
             first_page=1,
             last_page=10,
-            fmt="png"
+            fmt="png",
+            thread_count=1,
+            use_pdftocairo=True
         )
 
-        print(f"Converted {len(images)} pages")
+        print(f"Converted {len(images)} pages from file {temp_path}")
+        
+        print(f"Temp file exists: {os.path.exists(temp_path)}")
 
         results = []
 
