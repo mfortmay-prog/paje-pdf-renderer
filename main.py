@@ -1,6 +1,6 @@
 from fastapi import FastAPI, UploadFile, File, Form
-from pdf2image import convert_from_bytes
 from typing import Optional
+from pdf2image import convert_from_bytes, convert_from_path
 import requests
 import io
 import base64
@@ -26,13 +26,19 @@ async def render_pdf(
         else:
             raise Exception("No file or pdf_url provided")
 
-        images = convert_from_bytes(
-            pdf_bytes,
+        # Save PDF to temp file
+        temp_path = "/tmp/input.pdf"
+
+        with open(temp_path, "wb") as f:
+            f.write(pdf_bytes)
+
+        # Convert using file path (more reliable)
+        images = convert_from_path(
+            temp_path,
             poppler_path="/usr/bin",
             first_page=1,
             last_page=10,
-            fmt="png",
-            thread_count=1
+            fmt="png"
         )
 
         print(f"Converted {len(images)} pages")
