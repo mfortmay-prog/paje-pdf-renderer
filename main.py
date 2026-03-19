@@ -36,7 +36,6 @@ async def render_pdf(
         # Convert using file path (more reliable)
         images = convert_from_path(
             temp_path,
-            poppler_path="/usr/bin",
             first_page=1,
             last_page=10,
             fmt="png",
