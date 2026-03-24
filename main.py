@@ -1,11 +1,14 @@
 from fastapi import FastAPI, UploadFile, File, Form
 from typing import Optional
 from pdf2image import convert_from_bytes, convert_from_path
-import requests
+from pydantic import BaseModel
 import io
 import os
 import subprocess
 import base64
+import cv2
+import numpy as np
+import requests
 
 app = FastAPI()
 
@@ -100,3 +103,64 @@ async def render_pdf(
                 "details": str(e)
             }
         }
+
+class ImageRequest(BaseModel):
+    image_url: str
+
+
+@app.post("/detect-photos")
+async def detect_photos(req: ImageRequest):
+    try:
+        print("CV DETECTOR STARTED")
+        print("Image URL:", req.image_url)
+
+        # Download image
+        response = requests.get(req.image_url)
+        image_bytes = np.asarray(bytearray(response.content), dtype=np.uint8)
+        img = cv2.imdecode(image_bytes, cv2.IMREAD_COLOR)
+
+        if img is None:
+            print("ERROR: Image failed to load")
+            return []
+
+        height, width = img.shape[:2]
+
+        # Convert to grayscale
+        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+        # Edge detection
+        edges = cv2.Canny(gray, 50, 150)
+
+        # Find contours
+        contours, _ = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+        results = []
+
+        for cnt in contours:
+            x, y, w, h = cv2.boundingRect(cnt)
+
+            # Filter small regions
+            if w < width * 0.1 or h < height * 0.1:
+                continue
+
+            # Filter extreme shapes
+            aspect_ratio = w / float(h)
+            if aspect_ratio < 0.3 or aspect_ratio > 5:
+                continue
+
+            results.append({
+                "bbox": {
+                    "x": x / width,
+                    "y": y / height,
+                    "w": w / width,
+                    "h": h / height
+                }
+            })
+
+        print("Detected regions:", len(results))
+
+        return results
+
+    except Exception as e:
+        print("DETECT ERROR:", str(e))
+        return []
