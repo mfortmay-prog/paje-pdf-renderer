@@ -4,4 +4,5 @@ pdf2image
 pillow
 python-multipart
 requests
+numpy
 opencv-python-headless
