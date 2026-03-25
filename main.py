@@ -137,6 +137,8 @@ async def detect_photos(req: ImageRequest):
 
         # Edge detection
         edges = cv2.Canny(gray, 50, 150)
+        kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (7, 7))
+        edges = cv2.morphologyEx(edges, cv2.MORPH_CLOSE, kernel)
 
         # Find contours
         contours, _ = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
