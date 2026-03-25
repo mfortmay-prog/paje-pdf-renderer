@@ -2,6 +2,7 @@ from fastapi import FastAPI, UploadFile, File, Form
 from typing import Optional
 from pdf2image import convert_from_bytes, convert_from_path
 from pydantic import BaseModel
+from fastapi.middleware.cors import CORSMiddleware
 import io
 import os
 import subprocess
@@ -11,7 +12,13 @@ import numpy as np
 import requests
 
 app = FastAPI()
-
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 print("=== NEW VERSION DEPLOYED ===")
 
 @app.post("/render-pdf")
