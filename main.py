@@ -3,6 +3,7 @@ from typing import Optional
 from pdf2image import convert_from_bytes, convert_from_path
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
+from openai import OpenAI
 import io
 import os
 import subprocess
@@ -173,3 +174,34 @@ async def detect_photos(req: ImageRequest):
     except Exception as e:
         print("DETECT ERROR:", str(e))
         return []
+
+client = OpenAI()
+
+class AnalyzeRequest(BaseModel):
+    image_url: str
+
+@app.post("/mentor/analyze-image")
+async def analyze_image(req: AnalyzeRequest):
+    try:
+        response = client.chat.completions.create(
+            model="gpt-4.1-mini",
+            messages=[
+                {
+                    "role": "user",
+                    "content": [
+                        {"type": "text", "text": "Analyze this home inspection screenshot. Clearly explain the issue in simple terms, explain why it matters, and ask 2 useful follow-up questions."},
+                        {"type": "image_url", "image_url": {"url": req.image_url}}
+                    ]
+                }
+            ],
+            max_tokens=300
+        )
+
+        text = response.choices[0].message.content
+
+        return {
+            "result": text
+        }
+
+    except Exception as e:
+        return {"error": str(e)}
