@@ -6,3 +6,4 @@ python-multipart
 requests
 numpy
 opencv-python-headless
+openai>=1.0.0
