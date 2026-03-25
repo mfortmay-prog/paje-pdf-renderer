@@ -179,7 +179,7 @@ client = OpenAI()
 
 class AnalyzeRequest(BaseModel):
     image_url: str
-
+    user_input: str = ""
 @app.post("/mentor/analyze-image")
 async def analyze_image(req: AnalyzeRequest):
     try:
@@ -191,7 +191,7 @@ async def analyze_image(req: AnalyzeRequest):
             "content": [
                 {
                     "type": "text",
-                    "text": "You are an expert assistant that adapts to the user's context.\n\nFirst, determine what the user is asking:\n- Home inspection / real estate\n- Food / drink\n- Technical troubleshooting\n- Writing assistance\n- Other\n\nIf the input is a home inspection screenshot:\n- Explain the defect\n- Explain why it matters\n- Ask follow-up questions\n\nIf no clear defect is visible, say:\n'No clear inspection defect identified.'\n\nDo NOT guess or assume problems.\n\nReturn your answer in this format:\n\nExplanation:\n...\n\nWhy it matters:\n...\n\nFollow-up questions:\n1. ...\n2. ...\n\nKeep it simple and practical."
+                    "text": f"You are an expert assistant that adapts to the user's context.\n\nFirst, determine what the user is asking:\n- Home inspection / real estate\n- Food / drink\n- Technical troubleshooting\n- Writing assistance\n- Other\n\nIf the input is a home inspection screenshot:\n- Explain the defect\n- Explain why it matters\n- Ask follow-up questions\n\nIf no clear defect is visible, say:\n'No clear inspection defect identified.'\n\nUser additional input:\n{req.user_input}\n\nDo NOT guess or assume problems.\n\nReturn your answer in this format:\n\nExplanation:\n...\n\nWhy it matters:\n...\n\nFollow-up questions:\n1. ...\n2. ...\n\nKeep it simple and practical."
                 },
                 {
                     "type": "image_url",
