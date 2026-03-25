@@ -184,19 +184,24 @@ class AnalyzeRequest(BaseModel):
 async def analyze_image(req: AnalyzeRequest):
     try:
         response = client.chat.completions.create(
-            model="gpt-4.1-mini",
-            messages=[
+    model="gpt-4.1-mini",
+    messages=[
+        {
+            "role": "user",
+            "content": [
                 {
-                    "role": "user",
-                    "content": [
-                        {"type": "text", "text": "Analyze this home inspection screenshot. Clearly explain the issue in simple terms, explain why it matters, and ask 2 useful follow-up questions."},
-                        {"type": "image_url", "image_url": {"url": req.image_url}}
-                    ]
+                    "type": "text",
+                    "text": "Analyze this home inspection screenshot.\n\nReturn your answer in this format:\n\nExplanation:\n[clear explanation]\n\nWhy it matters:\n[real-world risk]\n\nFollow-up questions:\n1. ...\n2. ...\n\nKeep it simple, practical, and easy for a realtor to understand."
+                },
+                {
+                    "type": "image_url",
+                    "image_url": {"url": req.image_url}
                 }
-            ],
-            max_tokens=300
-        )
-
+            ]
+        }
+    ],
+    max_tokens=300
+)
         text = response.choices[0].message.content
 
         return {
