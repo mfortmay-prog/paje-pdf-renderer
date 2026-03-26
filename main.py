@@ -223,11 +223,20 @@ async def analyze_image(req: AnalyzeRequest):
 
     "Form Output:\n"
     "Provide output formatted for an inspection response form using this exact structure:\n\n"
+    "CRITICAL FORMATTING RULES:\n"
+    "- Each section must contain ONLY its own content\n"
+    "- Do NOT include other section headers inside any section\n"
+    "- Remedy MUST be ONE line only\n"
+    "- Remedy MUST include: 'OR provide credit of $X'\n"
+    "- Estimated Cost MUST be a realistic range and consistent with Remedy credit\n"
+    "- Do NOT include '--- Supporting Details ---' inside any section content\n\n"
 
     "Deficiency:\n"
     "Provide a concise, inspection-style defect description.\n"
     "Format as: [Component] – [Condition observed + location].\n"
     "Use professional inspection terms such as 'observed', 'improper', 'inadequate', or 'damaged'.\n"
+    "When generating Estimated Cost, ensure it aligns with the Remedy credit amount.\n"
+    "The credit should fall within the estimated range.\n\n"
     "Do NOT include explanations or full sentences.\n\n"
 
     "Remedy:\n"
@@ -236,6 +245,12 @@ async def analyze_image(req: AnalyzeRequest):
     "Do NOT use phrases like 'have a contractor' or 'it is recommended'.\n"
     "Keep it concise and directive.\n"
     "When appropriate, include a credit option using this format: 'OR provide credit of $X'.\n\n"
+
+    "Remedy must:\n"
+    "- Be ONE line only\n"
+    "- Start with a strong action verb\n"
+    "- Include 'OR provide credit of $X'\n"
+    "- NOT include explanations or extra sections\n\n"
 
     "Keep both lines concise, no extra explanation, no full sentences unless necessary.\n"
     "Use decisive, professional wording. Avoid vague verbs like 'adjust'.\n"
