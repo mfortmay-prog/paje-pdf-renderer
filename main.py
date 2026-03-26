@@ -257,10 +257,9 @@ async def analyze_image(req: AnalyzeRequest):
     "- You MUST include ALL of the following sections:\n\n"
 
     "Severity:\n"
-    "Provide ONE severity level: Low, Moderate, or High.\n"
-    "Use confident, decisive language.\n"
-    "Do NOT use hedging words like 'may', 'could', or 'might'.\n"
-    "Follow with one short sentence focused on risk and outcome.\n\n"
+    "Format as: [Level] – [short justification].\n"
+    "Use ONE line only.\n"
+    "Do NOT use periods between sentences.\n\n"
 
     "Guidelines:\n"
     "- Low: cosmetic or minor issue with little immediate risk\n"
