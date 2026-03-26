@@ -226,16 +226,16 @@ async def analyze_image(req: AnalyzeRequest):
 
     "Deficiency:\n"
     "Provide a concise, inspection-style defect description.\n"
-    "Format as: [Section # if available] [Component] – [Condition observed + location].\n"
-    "Use professional inspection language such as 'observed', 'improper', 'inadequate', or 'damaged'.\n"
-    "If a section number is visible in the image, include it. If not, omit it.\n"
+    "Format as: [Component] – [Condition observed + location].\n"
+    "Use professional inspection terms such as 'observed', 'improper', 'inadequate', or 'damaged'.\n"
     "Do NOT include explanations or full sentences.\n\n"
 
     "Remedy:\n"
     "Provide ONE short, direct line using form-style language.\n"
-    "Start with an action verb.\n"
-    "Include a credit option using 'OR provide credit of $X'.\n"
-    "Do NOT include explanations, semicolons, or extra sentences.\n\n"
+    "Start with a strong action verb.\n"
+    "Do NOT use phrases like 'have a contractor' or 'it is recommended'.\n"
+    "Keep it concise and directive.\n"
+    "When appropriate, include a credit option using this format: 'OR provide credit of $X'.\n\n"
 
     "Keep both lines concise, no extra explanation, no full sentences unless necessary.\n"
     "Match real inspection response form style.\n\n"
@@ -260,8 +260,7 @@ async def analyze_image(req: AnalyzeRequest):
     "Provide ONE severity level: Low, Moderate, or High.\n"
     "Use confident, decisive language.\n"
     "Do NOT use hedging words like 'may', 'could', or 'might'.\n"
-    "Focus on risk and outcome (moisture intrusion, damage, safety, etc.).\n"
-    "Keep it to one short, strong sentence.\n\n"
+    "Follow with one short sentence focused on risk and outcome.\n\n"
 
     "Guidelines:\n"
     "- Low: cosmetic or minor issue with little immediate risk\n"
@@ -270,18 +269,21 @@ async def analyze_image(req: AnalyzeRequest):
                         
     "Estimated Cost:\n"
     "Provide a clean cost range using this format: $X–$Y.\n"
-    "Do NOT use 'to' or long explanations.\n"
-    "Keep it concise and easy to scan.\n"
-    "Optionally include a very short context phrase after the range if helpful.\n\n"
+    "Do NOT use 'to', dashes (-), or extra words like 'typical' or 'estimated'.\n"
+    "Keep it concise and easy to scan.\n\n"
+
+    "When providing a credit amount, convert the estimated cost range into a single reasonable value (typically midpoint or slightly higher for negotiation).\n\n"
                         
     "Recommended Actions:\n"
     "Provide 2–3 short bullet points.\n"
     "Each bullet must start with a strong action verb.\n"
     "Keep each bullet concise (no extra wording or explanations).\n"
-    "Focus only on the action, not the reasoning.\n\n"
+    "Do NOT include phrases like 'hire a contractor'.\n\n"
 
     "Negotiation Strategy:\n"
-    "Explain what the buyer/realtor should request and why.\n\n"
+    "Provide a clear and concise recommendation.\n"
+    "Use direct language such as 'Request repair prior to closing OR a credit'.\n"
+    "Keep it short and focused on outcome and leverage.\n\n"
 
     "If any of these sections are missing, the response is incomplete.\n\n"
 
