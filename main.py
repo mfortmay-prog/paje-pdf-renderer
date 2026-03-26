@@ -225,11 +225,17 @@ async def analyze_image(req: AnalyzeRequest):
     "Provide output formatted for an inspection response form using this exact structure:\n\n"
 
     "Deficiency:\n"
-    "[Include section number if available, component, and short defect description]\n\n"
+    "Provide a concise, inspection-style defect description.\n"
+    "Format as: [Section # if available] [Component] – [Condition observed + location].\n"
+    "Use professional inspection language such as 'observed', 'improper', 'inadequate', or 'damaged'.\n"
+    "If a section number is visible in the image, include it. If not, omit it.\n"
+    "Do NOT include explanations or full sentences.\n\n"
 
     "Remedy:\n"
-    "Use a short, directive action (start with a verb). Do NOT use phrases like 'have a contractor'.\n"
-    "Include a credit option with a single dollar amount when appropriate.\n\n"
+    "Provide ONE short, direct line using form-style language.\n"
+    "Start with an action verb.\n"
+    "Include a credit option using 'OR provide credit of $X'.\n"
+    "Do NOT include explanations, semicolons, or extra sentences.\n\n"
 
     "Keep both lines concise, no extra explanation, no full sentences unless necessary.\n"
     "Match real inspection response form style.\n\n"
@@ -251,9 +257,11 @@ async def analyze_image(req: AnalyzeRequest):
     "- You MUST include ALL of the following sections:\n\n"
 
     "Severity:\n"
-    "Provide ONE clear severity level: Low, Moderate, or High.\n"
-    "Do NOT use ranges or multiple levels.\n"
-    "Follow with a short, confident justification (no hedging words like 'may', 'could', 'might').\n\n"
+    "Provide ONE severity level: Low, Moderate, or High.\n"
+    "Use confident, decisive language.\n"
+    "Do NOT use hedging words like 'may', 'could', or 'might'.\n"
+    "Focus on risk and outcome (moisture intrusion, damage, safety, etc.).\n"
+    "Keep it to one short, strong sentence.\n\n"
 
     "Guidelines:\n"
     "- Low: cosmetic or minor issue with little immediate risk\n"
@@ -261,11 +269,16 @@ async def analyze_image(req: AnalyzeRequest):
     "- High: active damage, safety concern, or urgent repair needed\n\n"
                         
     "Estimated Cost:\n"
-    "Provide a realistic range and brief context (low vs high scenario).\n\n"
-    "When providing a credit amount, convert the estimated range into a single realistic number (typically midpoint or slightly higher for negotiation).\n\n"
-    
+    "Provide a clean cost range using this format: $X–$Y.\n"
+    "Do NOT use 'to' or long explanations.\n"
+    "Keep it concise and easy to scan.\n"
+    "Optionally include a very short context phrase after the range if helpful.\n\n"
+                        
     "Recommended Actions:\n"
-    "- Clear, practical steps\n\n"
+    "Provide 2–3 short bullet points.\n"
+    "Each bullet must start with a strong action verb.\n"
+    "Keep each bullet concise (no extra wording or explanations).\n"
+    "Focus only on the action, not the reasoning.\n\n"
 
     "Negotiation Strategy:\n"
     "Explain what the buyer/realtor should request and why.\n\n"
