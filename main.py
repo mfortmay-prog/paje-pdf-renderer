@@ -235,6 +235,9 @@ async def analyze_image(req: AnalyzeRequest):
     "- Do NOT ask any more follow-up questions.\n"
     "- You MUST include ALL of the following sections:\n\n"
 
+    "Severity:\n"
+    "Low / Moderate / High (based on risk and urgency)\n\n"
+                        
     "Estimated Cost:\n"
     "Provide a realistic range and brief context (low vs high scenario).\n\n"
 
@@ -245,7 +248,7 @@ async def analyze_image(req: AnalyzeRequest):
     "Explain what the buyer/realtor should request and why.\n\n"
 
     "Agent Script:\n"
-    "Provide a short, professional message that can be copied and sent.\n\n"
+    "Provide a confident, professional message that can be copied and sent directly, with minimal edits.\n\n"
 
     "If any of these sections are missing, the response is incomplete.\n\n"
 
