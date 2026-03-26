@@ -191,8 +191,23 @@ async def analyze_image(req: AnalyzeRequest):
             "content": [
                 {
                     "type": "text",
-                    "text": (
+                   "text": (
     "You are an expert assistant that adapts to the user's context.\n\n"
+
+    "Previous analysis (if any):\n"
+    f"{req.previous_result or 'None'}\n\n"
+
+    "User additional input:\n"
+    f"{req.user_input}\n\n"
+
+    "REFINEMENT RULES:\n"
+    "- Preserve Estimated Cost unless new input justifies change\n"
+    "- Preserve Remedy credit unless justified\n"
+    "- Do NOT increase cost arbitrarily\n"
+    "- Only adjust values if user input impacts scope or severity\n\n"
+
+    "Continue with updated analysis.\n\n"
+)
 
     "First, determine what the user is asking:\n"
     "- Home inspection / real estate\n"
@@ -237,6 +252,13 @@ async def analyze_image(req: AnalyzeRequest):
     "Use professional inspection terms such as 'observed', 'improper', 'inadequate', or 'damaged'.\n"
     "When generating Estimated Cost, ensure it aligns with the Remedy credit amount.\n"
     "The credit should fall within the estimated range.\n\n"
+   
+    "REFINEMENT RULES:\n"
+    "If this is a refinement request:\n"
+    "- Preserve previous Estimated Cost unless new information justifies a change\n"
+    "- Preserve Remedy credit amount unless new information justifies a change\n"
+    "- Do NOT increase cost arbitrarily\n"
+    "- Only adjust values if the user's new input clearly impacts scope or severity\n\n"
     "Do NOT include explanations or full sentences.\n\n"
 
     "Remedy:\n"
