@@ -183,9 +183,9 @@ class AnalyzeRequest(BaseModel):
 @app.post("/mentor/analyze-image")
 async def analyze_image(req: AnalyzeRequest):
     try:
-    response = client.chat.completions.create(
-        model="gpt-4.1-mini",
-        messages=[
+        response = client.chat.completions.create(
+            model="gpt-4.1-mini",
+            messages=[
             {
                 "role": "user",
                 "content": [
@@ -195,7 +195,7 @@ async def analyze_image(req: AnalyzeRequest):
                             "You are an expert assistant that adapts to the user's context.\n\n"
 
                             "Previous analysis (if any):\n"
-                            f"{req.previous_result or 'None'}\n\n"
+                            f"{getattr(req, 'previous_result', None) or 'None'}\n\n"
 
                             "User additional input:\n"
                             f"{req.user_input}\n\n"
@@ -207,24 +207,9 @@ async def analyze_image(req: AnalyzeRequest):
                             "- Only adjust values if user input impacts scope or severity\n"
                             "- If no meaningful new information is provided, return the same values\n\n"
 
-                            "First, determine what the user is asking:\n"
-                            "- Home inspection / real estate\n"
-                            "- Food / drink\n"
-                            "- Technical troubleshooting\n"
-                            "- Writing assistance\n"
-                            "- Other\n\n"
-
                             "If the input is a home inspection screenshot:\n"
                             "- Identify the primary defect\n"
-                            "- Explain the issue clearly\n"
-                            "- Explain why it matters in real-world terms\n\n"
-
-                            "If multiple defects are visible:\n"
-                            "- Focus ONLY on the primary defect\n"
-                            "- Ignore partial or cut-off defects\n\n"
-
-                            "If no clear defect is visible, respond exactly with:\n"
-                            "'No clear inspection defect identified.'\n\n"
+                            "- Focus ONLY on that defect\n\n"
 
                             "Do NOT guess or assume problems.\n\n"
 
@@ -232,36 +217,22 @@ async def analyze_image(req: AnalyzeRequest):
 
                             "Form Output:\n\n"
 
-                            "CRITICAL FORMATTING RULES:\n"
-                            "- Each section must contain ONLY its own content\n"
-                            "- Do NOT include other section headers inside any section\n"
-                            "- Remedy MUST be ONE line only\n"
-                            "- Remedy MUST include: 'OR provide credit of $X'\n"
-                            "- Estimated Cost MUST align with Remedy credit\n\n"
+                            "CRITICAL RULES:\n"
+                            "- Remedy MUST include 'OR provide credit of $X'\n"
+                            "- Remedy MUST be ONE line\n"
+                            "- Cost must align with credit\n\n"
 
-                            "Deficiency:\n"
-                            "[Component – Condition observed + location]\n\n"
-
-                            "Remedy:\n"
-                            "[One line repair OR credit statement]\n\n"
+                            "Deficiency:\n[Component – condition observed]\n\n"
+                            "Remedy:\n[One line OR credit]\n\n"
 
                             "--- Supporting Details ---\n\n"
 
                             "Explanation:\n...\n\n"
                             "Why it matters:\n...\n\n"
-
-                            "Severity:\n"
-                            "[Low/Moderate/High – short justification]\n\n"
-
-                            "Estimated Cost:\n"
-                            "$X–$Y\n\n"
-
-                            "Recommended Actions:\n"
-                            "- Action\n"
-                            "- Action\n\n"
-
-                            "Negotiation Strategy:\n"
-                            "Short, direct recommendation.\n\n"
+                            "Severity:\n[Level – short reason]\n\n"
+                            "Estimated Cost:\n$X–$Y\n\n"
+                            "Recommended Actions:\n- Action\n- Action\n\n"
+                            "Negotiation Strategy:\nShort recommendation.\n\n"
                         )
                     },
                     {
@@ -282,6 +253,3 @@ async def analyze_image(req: AnalyzeRequest):
 
 except Exception as e:
     return {"error": str(e)}
-
-    except Exception as e:
-        return {"error": str(e)}
