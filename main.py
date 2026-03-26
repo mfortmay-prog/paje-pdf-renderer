@@ -183,164 +183,105 @@ class AnalyzeRequest(BaseModel):
 @app.post("/mentor/analyze-image")
 async def analyze_image(req: AnalyzeRequest):
     try:
-        response = client.chat.completions.create(
-    model="gpt-4.1-mini",
-    messages=[
-        {
-            "role": "user",
-            "content": [
-                {
-                    "type": "text",
-                   "text": (
-    "You are an expert assistant that adapts to the user's context.\n\n"
+    response = client.chat.completions.create(
+        model="gpt-4.1-mini",
+        messages=[
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "type": "text",
+                        "text": (
+                            "You are an expert assistant that adapts to the user's context.\n\n"
 
-    "Previous analysis (if any):\n"
-    f"{req.previous_result or 'None'}\n\n"
+                            "Previous analysis (if any):\n"
+                            f"{req.previous_result or 'None'}\n\n"
 
-    "User additional input:\n"
-    f"{req.user_input}\n\n"
+                            "User additional input:\n"
+                            f"{req.user_input}\n\n"
 
-    "REFINEMENT RULES:\n"
-    "- Preserve Estimated Cost unless new input justifies change\n"
-    "- Preserve Remedy credit unless justified\n"
-    "- Do NOT increase cost arbitrarily\n"
-    "- Only adjust values if user input impacts scope or severity\n\n"
+                            "REFINEMENT RULES:\n"
+                            "- Preserve Estimated Cost unless new input justifies change\n"
+                            "- Preserve Remedy credit unless justified\n"
+                            "- Do NOT increase cost arbitrarily\n"
+                            "- Only adjust values if user input impacts scope or severity\n"
+                            "- If no meaningful new information is provided, return the same values\n\n"
 
-    "Continue with updated analysis.\n\n"
-)
+                            "First, determine what the user is asking:\n"
+                            "- Home inspection / real estate\n"
+                            "- Food / drink\n"
+                            "- Technical troubleshooting\n"
+                            "- Writing assistance\n"
+                            "- Other\n\n"
 
-    "First, determine what the user is asking:\n"
-    "- Home inspection / real estate\n"
-    "- Food / drink\n"
-    "- Technical troubleshooting\n"
-    "- Writing assistance\n"
-    "- Other\n\n"
+                            "If the input is a home inspection screenshot:\n"
+                            "- Identify the primary defect\n"
+                            "- Explain the issue clearly\n"
+                            "- Explain why it matters in real-world terms\n\n"
 
-    "If the input is a home inspection screenshot:\n"
-    "- Identify the primary defect\n"
-    "- Explain the issue clearly\n"
-    "- Explain why it matters in real-world terms\n\n"
+                            "If multiple defects are visible:\n"
+                            "- Focus ONLY on the primary defect\n"
+                            "- Ignore partial or cut-off defects\n\n"
 
-    "If multiple defects are visible, identify the PRIMARY defect that appears most central or most detailed in the screenshot.\n"
-    "Focus ONLY on that one defect.\n"
-    "Ignore partial or cut-off defects at the top or bottom.\n"
-    "If two defects are equally clear, ask: \"Which defect would you like to focus on?\"\n\n"
+                            "If no clear defect is visible, respond exactly with:\n"
+                            "'No clear inspection defect identified.'\n\n"
 
-    "If no clear defect is visible, respond exactly with:\n"
-    "'No clear inspection defect identified.'\n\n"
+                            "Do NOT guess or assume problems.\n\n"
 
-    "User additional input:\n"
-    f"{req.user_input}\n\n"
+                            "Return your answer in this format:\n\n"
 
-    "Do NOT guess or assume problems.\n\n"
+                            "Form Output:\n\n"
 
-    "Return your answer in this format:\n\n"
+                            "CRITICAL FORMATTING RULES:\n"
+                            "- Each section must contain ONLY its own content\n"
+                            "- Do NOT include other section headers inside any section\n"
+                            "- Remedy MUST be ONE line only\n"
+                            "- Remedy MUST include: 'OR provide credit of $X'\n"
+                            "- Estimated Cost MUST align with Remedy credit\n\n"
 
-    "Form Output:\n"
-    "Provide output formatted for an inspection response form using this exact structure:\n\n"
-    "CRITICAL FORMATTING RULES:\n"
-    "- Each section must contain ONLY its own content\n"
-    "- Do NOT include other section headers inside any section\n"
-    "- Remedy MUST be ONE line only\n"
-    "- Remedy MUST include: 'OR provide credit of $X'\n"
-    "- Estimated Cost MUST be a realistic range and consistent with Remedy credit\n"
-    "- Do NOT include '--- Supporting Details ---' inside any section content\n\n"
+                            "Deficiency:\n"
+                            "[Component – Condition observed + location]\n\n"
 
-    "Deficiency:\n"
-    "Provide a concise, inspection-style defect description.\n"
-    "Format as: [Component] – [Condition observed + location].\n"
-    "Use professional inspection terms such as 'observed', 'improper', 'inadequate', or 'damaged'.\n"
-    "When generating Estimated Cost, ensure it aligns with the Remedy credit amount.\n"
-    "The credit should fall within the estimated range.\n\n"
-   
-    "REFINEMENT RULES:\n"
-    "If this is a refinement request:\n"
-    "- Preserve previous Estimated Cost unless new information justifies a change\n"
-    "- Preserve Remedy credit amount unless new information justifies a change\n"
-    "- Do NOT increase cost arbitrarily\n"
-    "- Only adjust values if the user's new input clearly impacts scope or severity\n\n"
-    "Do NOT include explanations or full sentences.\n\n"
+                            "Remedy:\n"
+                            "[One line repair OR credit statement]\n\n"
 
-    "Remedy:\n"
-    "Provide ONE short, direct line using form-style language.\n"
-    "Start with a strong action verb.\n"
-    "Do NOT use phrases like 'have a contractor' or 'it is recommended'.\n"
-    "Keep it concise and directive.\n"
-    "When appropriate, include a credit option using this format: 'OR provide credit of $X'.\n\n"
+                            "--- Supporting Details ---\n\n"
 
-    "Remedy must:\n"
-    "- Be ONE line only\n"
-    "- Start with a strong action verb\n"
-    "- Include 'OR provide credit of $X'\n"
-    "- NOT include explanations or extra sections\n\n"
+                            "Explanation:\n...\n\n"
+                            "Why it matters:\n...\n\n"
 
-    "Keep both lines concise, no extra explanation, no full sentences unless necessary.\n"
-    "Use decisive, professional wording. Avoid vague verbs like 'adjust'.\n"
-    "Match real inspection response form style.\n\n"
+                            "Severity:\n"
+                            "[Low/Moderate/High – short justification]\n\n"
 
-    "--- Supporting Details ---\n\n"
+                            "Estimated Cost:\n"
+                            "$X–$Y\n\n"
 
-    "Explanation:\n"
-    "...\n\n"
+                            "Recommended Actions:\n"
+                            "- Action\n"
+                            "- Action\n\n"
 
-    "Why it matters:\n"
-    "...\n\n"
+                            "Negotiation Strategy:\n"
+                            "Short, direct recommendation.\n\n"
+                        )
+                    },
+                    {
+                        "type": "image_url",
+                        "image_url": {"url": req.image_url}
+                    }
+                ]
+            }
+        ],
+        max_tokens=600
+    )
 
-    "Follow-up questions:\n"
-    "1. ...\n"
-    "2. ...\n\n"
+    text = response.choices[0].message.content
 
-    "If the \"User additional input\" section is NOT empty:\n"
-    "- Do NOT ask any more follow-up questions.\n"
-    "- You MUST include ALL of the following sections:\n\n"
+    return {
+        "result": text
+    }
 
-    "Severity:\n"
-    "Format as: [Level] – [short justification].\n"
-    "Use ONE line only.\n"
-    "Do NOT use periods between sentences.\n\n"
-
-    "Guidelines:\n"
-    "- Low: cosmetic or minor issue with little immediate risk\n"
-    "- Moderate: defect present that could lead to damage if not addressed\n"
-    "- High: active damage, safety concern, or urgent repair needed\n\n"
-                        
-    "Estimated Cost:\n"
-    "Provide a clean cost range using this format: $X–$Y.\n"
-    "Do NOT use 'to', dashes (-), or extra words like 'typical' or 'estimated'.\n"
-    "Keep it concise and easy to scan.\n\n"
-
-    "When providing a credit amount, convert the estimated cost range into a single reasonable value (typically midpoint or slightly higher for negotiation).\n\n"
-                        
-    "Recommended Actions:\n"
-    "Provide 2–3 short bullet points.\n"
-    "Each bullet must start with a strong action verb.\n"
-    "Keep each bullet concise (no extra wording or explanations).\n"
-    "Do NOT include phrases like 'hire a contractor'.\n\n"
-
-    "Negotiation Strategy:\n"
-    "Provide a clear and concise recommendation.\n"
-    "Use direct language such as 'Request repair prior to closing OR a credit'.\n"
-    "Keep it short and focused on outcome and leverage.\n\n"
-
-    "If any of these sections are missing, the response is incomplete.\n\n"
-
-    "Keep everything practical, concise, and focused on helping the user make a decision."
-)
-                },
-                {
-                    "type": "image_url",
-                    "image_url": {"url": req.image_url}
-                }
-            ]
-        }
-    ],
-    max_tokens=600
-)
-        text = response.choices[0].message.content
-
-        return {
-            "result": text
-        }
+except Exception as e:
+    return {"error": str(e)}
 
     except Exception as e:
         return {"error": str(e)}
