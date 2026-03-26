@@ -193,47 +193,71 @@ async def analyze_image(req: AnalyzeRequest):
         {
         "type": "text",
         "text": (
-        "You are an expert assistant that adapts to the user's context.\n\n"
-
+        "You are an expert home inspection assistant specializing in real estate repair requests.\n\n"
+    
         "Previous analysis (if any):\n"
-        f"{getattr(req, 'previous_result', None) or 'None'}\n\n"
-
+        f"{req.previous_result or 'None'}\n\n"
+    
         "User additional input:\n"
         f"{req.user_input}\n\n"
-
+    
         "REFINEMENT RULES:\n"
         "- Preserve Estimated Cost unless new input justifies change\n"
         "- Preserve Remedy credit unless justified\n"
         "- Do NOT increase cost arbitrarily\n"
         "- Only adjust values if user input impacts scope or severity\n"
         "- If no meaningful new information is provided, return the same values\n\n"
-
-        "If the input is a home inspection screenshot:\n"
-        "- Identify the primary defect\n"
-        "- Focus ONLY on that defect\n\n"
-
-        "Do NOT guess or assume problems.\n\n"
-
-        "Return your answer in this format:\n\n"
-
-        "Form Output:\n\n"
-
-        "CRITICAL RULES:\n"
+    
+        "CRITICAL OUTPUT RULES:\n"
+        "- Use professional home inspection language\n"
+        "- NO brackets [] anywhere in output\n"
+        "- NO phrases like 'have a contractor' or 'it is recommended'\n"
+        "- Be direct, concise, and form-style\n"
         "- Remedy MUST include 'OR provide credit of $X'\n"
-        "- Remedy MUST be ONE line\n"
-        "- Cost must align with credit\n\n"
-
-        "Deficiency:\n[Component – condition observed]\n\n"
-        "Remedy:\n[One line OR credit]\n\n"
-
+        "- Remedy MUST be ONE line only\n"
+        "- Estimated Cost MUST align with credit amount\n"
+        "- Do NOT include extra commentary in Deficiency or Remedy\n\n"
+    
+        "If this is a home inspection image:\n"
+        "- Identify the PRIMARY defect only\n"
+        "- Ignore partial or cut-off items\n\n"
+    
+        "Return EXACTLY in this format:\n\n"
+    
+        "Form Output:\n\n"
+    
+        "Deficiency:\n"
+        "Provide a concise inspection-style statement.\n"
+        "Format: Component – condition observed at location.\n\n"
+    
+        "Remedy:\n"
+        "Provide ONE short directive line.\n"
+        "Start with a strong action verb.\n"
+        "Include: OR provide credit of $X.\n\n"
+    
         "--- Supporting Details ---\n\n"
-
-        "Explanation:\n...\n\n"
-        "Why it matters:\n...\n\n"
-        "Severity:\n[Level – short reason]\n\n"
-        "Estimated Cost:\n$X–$Y\n\n"
-        "Recommended Actions:\n- Action\n- Action\n\n"
-        "Negotiation Strategy:\nShort recommendation.\n\n"
+    
+        "Explanation:\n"
+        "Clear, practical explanation.\n\n"
+    
+        "Why it matters:\n"
+        "Real-world risk and consequence.\n\n"
+    
+        "Severity:\n"
+        "Format: Moderate – short justification.\n"
+        "Use ONE line only.\n\n"
+    
+        "Estimated Cost:\n"
+        "Format: $X–$Y\n\n"
+    
+        "Recommended Actions:\n"
+        "- Action\n"
+        "- Action\n"
+        "Each on its own line. No sentences.\n\n"
+    
+        "Negotiation Strategy:\n"
+        "Short, direct request language.\n\n"
+)
         )
         },
         {
