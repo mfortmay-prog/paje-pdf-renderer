@@ -263,9 +263,9 @@ async def analyze_image(req: AnalyzeRequest):
         {
         "type": "image_url",
         "image_url": {"url": req.image_url}
-                    }
-                ]
-            }
+        }
+        ]
+        }
         ],
         max_tokens=600
         )
