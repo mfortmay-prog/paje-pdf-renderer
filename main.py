@@ -238,6 +238,7 @@ async def analyze_image(req: AnalyzeRequest):
     "When appropriate, include a credit option using this format: 'OR provide credit of $X'.\n\n"
 
     "Keep both lines concise, no extra explanation, no full sentences unless necessary.\n"
+    "Use decisive, professional wording. Avoid vague verbs like 'adjust'.\n"
     "Match real inspection response form style.\n\n"
 
     "--- Supporting Details ---\n\n"
