@@ -185,72 +185,72 @@ class AnalyzeRequest(BaseModel):
 async def analyze_image(req: AnalyzeRequest):
     try:
         response = client.chat.completions.create(
-            model="gpt-4.1-mini",
-            messages=[
-            {
-            "role": "user",
-            "content": [
-                {
-            "type": "text",
-            "text": (
-            "You are an expert assistant that adapts to the user's context.\n\n"
+        model="gpt-4.1-mini",
+        messages=[
+        {
+        "role": "user",
+        "content": [
+        {
+        "type": "text",
+        "text": (
+        "You are an expert assistant that adapts to the user's context.\n\n"
 
-            "Previous analysis (if any):\n"
-            f"{getattr(req, 'previous_result', None) or 'None'}\n\n"
+        "Previous analysis (if any):\n"
+        f"{getattr(req, 'previous_result', None) or 'None'}\n\n"
 
-            "User additional input:\n"
-            f"{req.user_input}\n\n"
+        "User additional input:\n"
+        f"{req.user_input}\n\n"
 
-            "REFINEMENT RULES:\n"
-            "- Preserve Estimated Cost unless new input justifies change\n"
-            "- Preserve Remedy credit unless justified\n"
-            "- Do NOT increase cost arbitrarily\n"
-            "- Only adjust values if user input impacts scope or severity\n"
-            "- If no meaningful new information is provided, return the same values\n\n"
+        "REFINEMENT RULES:\n"
+        "- Preserve Estimated Cost unless new input justifies change\n"
+        "- Preserve Remedy credit unless justified\n"
+        "- Do NOT increase cost arbitrarily\n"
+        "- Only adjust values if user input impacts scope or severity\n"
+        "- If no meaningful new information is provided, return the same values\n\n"
 
-            "If the input is a home inspection screenshot:\n"
-            "- Identify the primary defect\n"
-            "- Focus ONLY on that defect\n\n"
+        "If the input is a home inspection screenshot:\n"
+        "- Identify the primary defect\n"
+        "- Focus ONLY on that defect\n\n"
 
-            "Do NOT guess or assume problems.\n\n"
+        "Do NOT guess or assume problems.\n\n"
 
-            "Return your answer in this format:\n\n"
+        "Return your answer in this format:\n\n"
 
-            "Form Output:\n\n"
+        "Form Output:\n\n"
 
-            "CRITICAL RULES:\n"
-            "- Remedy MUST include 'OR provide credit of $X'\n"
-            "- Remedy MUST be ONE line\n"
-            "- Cost must align with credit\n\n"
+        "CRITICAL RULES:\n"
+        "- Remedy MUST include 'OR provide credit of $X'\n"
+        "- Remedy MUST be ONE line\n"
+        "- Cost must align with credit\n\n"
 
-            "Deficiency:\n[Component – condition observed]\n\n"
-            "Remedy:\n[One line OR credit]\n\n"
+        "Deficiency:\n[Component – condition observed]\n\n"
+        "Remedy:\n[One line OR credit]\n\n"
 
-            "--- Supporting Details ---\n\n"
+        "--- Supporting Details ---\n\n"
 
-            "Explanation:\n...\n\n"
-            "Why it matters:\n...\n\n"
-            "Severity:\n[Level – short reason]\n\n"
-            "Estimated Cost:\n$X–$Y\n\n"
-            "Recommended Actions:\n- Action\n- Action\n\n"
-            "Negotiation Strategy:\nShort recommendation.\n\n"
+        "Explanation:\n...\n\n"
+        "Why it matters:\n...\n\n"
+        "Severity:\n[Level – short reason]\n\n"
+        "Estimated Cost:\n$X–$Y\n\n"
+        "Recommended Actions:\n- Action\n- Action\n\n"
+        "Negotiation Strategy:\nShort recommendation.\n\n"
         )
-    },
-    {
-            "type": "image_url",
-            "image_url": {"url": req.image_url}
+        },
+        {
+        "type": "image_url",
+        "image_url": {"url": req.image_url}
                     }
                 ]
             }
         ],
-            max_tokens=600
-    )
+        max_tokens=600
+        )
 
-            text = response.choices[0].message.content
+        text = response.choices[0].message.content
 
         return {
         "result": text
-    }
+        }
 
     except Exception as e:
-       return {"error": str(e)}
+        return {"error": str(e)}
