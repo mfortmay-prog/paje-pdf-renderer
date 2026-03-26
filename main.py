@@ -228,8 +228,8 @@ async def analyze_image(req: AnalyzeRequest):
     "[Include section number if available, component, and short defect description]\n\n"
 
     "Remedy:\n"
-    "Provide a short, directive repair action OR include a credit option with a single dollar amount.\n"
-    "Use concise, form-style language (no filler words).\n\n"
+    "Use a short, directive action (start with a verb). Do NOT use phrases like 'have a contractor'.\n"
+    "Include a credit option with a single dollar amount when appropriate.\n\n"
 
     "Keep both lines concise, no extra explanation, no full sentences unless necessary.\n"
     "Match real inspection response form style.\n\n"
@@ -253,7 +253,7 @@ async def analyze_image(req: AnalyzeRequest):
     "Severity:\n"
     "Provide ONE clear severity level: Low, Moderate, or High.\n"
     "Do NOT use ranges or multiple levels.\n"
-    "Follow with a short justification in one sentence.\n\n"
+    "Follow with a short, confident justification (no hedging words like 'may', 'could', 'might').\n\n"
 
     "Guidelines:\n"
     "- Low: cosmetic or minor issue with little immediate risk\n"
