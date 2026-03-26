@@ -252,5 +252,5 @@ async def analyze_image(req: AnalyzeRequest):
         "result": text
     }
 
-except Exception as e:
+    except Exception as e:
        return {"error": str(e)}
