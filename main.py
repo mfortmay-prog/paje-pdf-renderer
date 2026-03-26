@@ -258,7 +258,7 @@ async def analyze_image(req: AnalyzeRequest):
         "Negotiation Strategy:\n"
         "Short, direct request language.\n\n"
         )
-        )
+        
         },
         {
         "type": "image_url",
