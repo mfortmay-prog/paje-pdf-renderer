@@ -221,6 +221,20 @@ async def analyze_image(req: AnalyzeRequest):
 
     "Return your answer in this format:\n\n"
 
+    "Form Output:\n"
+    "Provide output formatted for an inspection response form using this exact structure:\n\n"
+
+    "Deficiency:\n"
+    "[Include section number if available, component, and short defect description]\n\n"
+
+    "Remedy:\n"
+    "[Short, direct action statement OR request credit with a single dollar amount]\n\n"
+
+    "Keep both lines concise, no extra explanation, no full sentences unless necessary.\n"
+    "Match real inspection response form style.\n\n"
+
+    "--- Supporting Details ---\n\n"
+
     "Explanation:\n"
     "...\n\n"
 
@@ -240,15 +254,13 @@ async def analyze_image(req: AnalyzeRequest):
                         
     "Estimated Cost:\n"
     "Provide a realistic range and brief context (low vs high scenario).\n\n"
-
+    "When providing a credit amount, convert the estimated range into a single realistic number (typically midpoint or slightly higher for negotiation).\n\n"
+    
     "Recommended Actions:\n"
     "- Clear, practical steps\n\n"
 
     "Negotiation Strategy:\n"
     "Explain what the buyer/realtor should request and why.\n\n"
-
-    "Agent Script:\n"
-    "Provide a confident, professional message that can be copied and sent directly, with minimal edits.\n\n"
 
     "If any of these sections are missing, the response is incomplete.\n\n"
 
