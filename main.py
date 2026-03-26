@@ -243,14 +243,14 @@ async def analyze_image(req: AnalyzeRequest):
                 ]
             }
         ],
-        max_tokens=600
+            max_tokens=600
     )
 
-    text = response.choices[0].message.content
+            text = response.choices[0].message.content
 
-    return {
+        return {
         "result": text
     }
 
 except Exception as e:
-    return {"error": str(e)}
+       return {"error": str(e)}
