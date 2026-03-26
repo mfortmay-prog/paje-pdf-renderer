@@ -191,7 +191,66 @@ async def analyze_image(req: AnalyzeRequest):
             "content": [
                 {
                     "type": "text",
-                    "text": f"You are an expert assistant that adapts to the user's context.\n\nFirst, determine what the user is asking:\n- Home inspection / real estate\n- Food / drink\n- Technical troubleshooting\n- Writing assistance\n- Other\n\nIf the input is a home inspection screenshot:\n- Explain the defect\n- Explain why it matters\n- Ask follow-up questions\n\nIf multiple defects are visible, identify the PRIMARY defect that appears most central or most detailed in the screenshot.\n\nFocus ONLY on that one defect.\n\nIgnore partial or cut-off defects at the top or bottom.\n\nIf two defects are equally clear, ask:\n\"Which defect would you like to focus on?\"\n\nIf no clear defect is visible, say:\n'No clear inspection defect identified.'\n\nUser additional input:\n{req.user_input}\n\nDo NOT guess or assume problems.\n\nReturn your answer in this format:\n\nExplanation:\n...\n\nWhy it matters:\n...\n\nFollow-up questions:\n1. ...\n2. ...\n\nIf the \"User additional input\" section is NOT empty, you MUST include the following sections in your response:\n\nEstimated Cost:\n[give a realistic range]\n\nRecommended Actions:\n- ...\n- ...\n\nNegotiation Strategy:\n[what the buyer/realtor should request]\n\nAgent Script:\n[a short, professional message they can copy]\n\nIf these sections are missing, the response is incomplete.\n\nKeep everything practical and decision-focused."
+                    "text": (
+    "You are an expert assistant that adapts to the user's context.\n\n"
+
+    "First, determine what the user is asking:\n"
+    "- Home inspection / real estate\n"
+    "- Food / drink\n"
+    "- Technical troubleshooting\n"
+    "- Writing assistance\n"
+    "- Other\n\n"
+
+    "If the input is a home inspection screenshot:\n"
+    "- Identify the primary defect\n"
+    "- Explain the issue clearly\n"
+    "- Explain why it matters in real-world terms\n\n"
+
+    "If multiple defects are visible, identify the PRIMARY defect that appears most central or most detailed in the screenshot.\n"
+    "Focus ONLY on that one defect.\n"
+    "Ignore partial or cut-off defects at the top or bottom.\n"
+    "If two defects are equally clear, ask: \"Which defect would you like to focus on?\"\n\n"
+
+    "If no clear defect is visible, respond exactly with:\n"
+    "'No clear inspection defect identified.'\n\n"
+
+    "User additional input:\n"
+    f"{req.user_input}\n\n"
+
+    "Do NOT guess or assume problems.\n\n"
+
+    "Return your answer in this format:\n\n"
+
+    "Explanation:\n"
+    "...\n\n"
+
+    "Why it matters:\n"
+    "...\n\n"
+
+    "Follow-up questions:\n"
+    "1. ...\n"
+    "2. ...\n\n"
+
+    "If the \"User additional input\" section is NOT empty:\n"
+    "- Do NOT ask any more follow-up questions.\n"
+    "- You MUST include ALL of the following sections:\n\n"
+
+    "Estimated Cost:\n"
+    "Provide a realistic range and brief context (low vs high scenario).\n\n"
+
+    "Recommended Actions:\n"
+    "- Clear, practical steps\n\n"
+
+    "Negotiation Strategy:\n"
+    "Explain what the buyer/realtor should request and why.\n\n"
+
+    "Agent Script:\n"
+    "Provide a short, professional message that can be copied and sent.\n\n"
+
+    "If any of these sections are missing, the response is incomplete.\n\n"
+
+    "Keep everything practical, concise, and focused on helping the user make a decision."
+)
                 },
                 {
                     "type": "image_url",
@@ -200,7 +259,7 @@ async def analyze_image(req: AnalyzeRequest):
             ]
         }
     ],
-    max_tokens=300
+    max_tokens=600
 )
         text = response.choices[0].message.content
 
