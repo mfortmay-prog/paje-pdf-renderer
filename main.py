@@ -228,7 +228,8 @@ async def analyze_image(req: AnalyzeRequest):
     "[Include section number if available, component, and short defect description]\n\n"
 
     "Remedy:\n"
-    "[Short, direct action statement OR request credit with a single dollar amount]\n\n"
+    "Provide a short, directive repair action OR include a credit option with a single dollar amount.\n"
+    "Use concise, form-style language (no filler words).\n\n"
 
     "Keep both lines concise, no extra explanation, no full sentences unless necessary.\n"
     "Match real inspection response form style.\n\n"
@@ -250,7 +251,14 @@ async def analyze_image(req: AnalyzeRequest):
     "- You MUST include ALL of the following sections:\n\n"
 
     "Severity:\n"
-    "Low / Moderate / High (based on risk and urgency)\n\n"
+    "Provide ONE clear severity level: Low, Moderate, or High.\n"
+    "Do NOT use ranges or multiple levels.\n"
+    "Follow with a short justification in one sentence.\n\n"
+
+    "Guidelines:\n"
+    "- Low: cosmetic or minor issue with little immediate risk\n"
+    "- Moderate: defect present that could lead to damage if not addressed\n"
+    "- High: active damage, safety concern, or urgent repair needed\n\n"
                         
     "Estimated Cost:\n"
     "Provide a realistic range and brief context (low vs high scenario).\n\n"
